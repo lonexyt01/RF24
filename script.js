@@ -1,41 +1,28 @@
 async function loadStats(){
 
-    try{
+  try{
 
-        const res = await fetch("/api/stats");
+    const res = await fetch("/api/stats");
+    const data = await res.json();
 
-        const game = await res.json();
+    document.getElementById("online").innerText = data.online.toLocaleString();
+    document.getElementById("visits").innerText = data.visits.toLocaleString();
+    document.getElementById("favorites").innerText = data.favorites.toLocaleString();
+    document.getElementById("likes").innerText = data.likes + "%";
 
-        document.getElementById("online").innerText =
-        game.playing.toLocaleString();
+  }
+  catch(err){
 
-        document.getElementById("favorites").innerText =
-        game.favoritedCount.toLocaleString();
+    console.log(err);
 
-        document.getElementById("visits").innerText =
-        game.visits.toLocaleString();
+    document.getElementById("online").innerText = "0";
+    document.getElementById("visits").innerText = "0";
+    document.getElementById("favorites").innerText = "0";
+    document.getElementById("likes").innerText = "0";
 
-        const likes =
-        Math.floor(
-            game.upVotes /
-            (game.upVotes + game.downVotes) * 100
-        );
-
-        document.getElementById("likes").innerText =
-        likes + "%";
-
-    }
-    catch(err){
-
-        console.log(err);
-
-        document.getElementById("online").innerText =
-        "Offline";
-
-    }
+  }
 
 }
 
 loadStats();
-
-setInterval(loadStats,10000);
+setInterval(loadStats, 10000);
